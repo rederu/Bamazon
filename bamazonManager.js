@@ -10,7 +10,7 @@ var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "********",
+    password: "******",
     database: "bamazon"
 });
 
@@ -42,11 +42,9 @@ function displayOptions() {
                 break;
             case (option3):
                 addInventory();
-                //setTimeout(displayOptions, 800);
                 break;
             case (option4):
                 addProduct();
-                // setTimeout(displayOptions, 800);
                 break;
             case (option5):
                 console.log("Thank you for your visit!");
@@ -92,6 +90,7 @@ function lowQuantity() {
     });
 };
 
+//Add inventory
 function addInventory() {
     inquirer.prompt([
         {
@@ -102,14 +101,21 @@ function addInventory() {
         {
             name: "addQuantity",
             type: "number",
-            message: "How many units would you like to add?"
+            message: "How many units would you like to add?",
+            validate: function (value) {
+				if (isNaN(value) === false) {
+					return true;
+				}
+				return false;
+			}
         }
     ]).then(function (answer) {
         var itemId = answer.itemID;
+        
         var newQuantity = answer.addQuantity;
+        //Connection to DB
         connection.query("SELECT * FROM products;", function (error, res) {
             if (error) throw error;
-
             for (var i = 0; i < res.length; i++) {
 
                 if (res[i].item_id === itemId) {
@@ -121,16 +127,17 @@ function addInventory() {
                
             }
             console.log("Units added successfully!");
+            //Inquirer options
             inquirer.prompt([
                 {
                     name: "goBack",
                     type: "list",
                     message: "Would you like to go back to the main menu?",
-                    choices:["Yes", "No"]
+                    choices:["Yes", "No, end my session"]
                 }
             ]).then(function(answer){
                 if(answer.goBack ==="Yes"){
-                    setTimeout(displayOptions, 800);
+                    displayOptions();
                 }else{
                     console.log("End of session.")
                     connection.end();
@@ -142,6 +149,70 @@ function addInventory() {
     });//End inquirer
 };//End addInventory
 
-function addProduct() {
 
-};
+//Function to add products
+function addProduct() {
+    inquirer.prompt([
+        {
+            type: "input",
+            name: "productName",
+            message:"Product Name: "
+        },
+        {
+            type:"input",
+            name: "departmentName",
+            message: "Department: "
+        },
+        {
+            type: "number",
+            name: "priceUnit",
+            message: "Price per Unit: ",
+            validate: function (value) {
+				if (isNaN(value) === false) {
+					return true;
+				}
+				return false;
+			}
+        },
+        {
+            type: "number",
+            name: "stockAva",
+            message: "Available stock: ",
+            validate: function (value) {
+				if (isNaN(value) === false) {
+					return true;
+				}
+				return false;
+			}
+        }
+
+    ]).then(function(answers){
+        //Connection query to add a new product on DB
+        connection.query("INSERT INTO products SET ? ",
+        {
+            product_name: answers.productName,
+            department_name: answers.departmentName,
+            price: answers.priceUnit,
+            stock_quantity: answers.stockAva,
+        }, function(err, res){
+            if(err) throw err;
+            console.log("The item has been added to the store.");
+            inquirer.prompt([
+                {
+                    name: "goBack",
+                    type: "list",
+                    message: "What would you like to do?",
+                    choices:["See current products", "Go to main menu"]
+                }
+            ]).then(function(answer){
+                if(answer.goBack ==="See current products"){
+                    displayStore();
+                    setTimeout(displayOptions, 800);
+                }else{
+                    displayOptions();
+                }
+            })//End inquirer2
+        });//End connection query
+    })//End Inquirer
+
+};//End addProduct
