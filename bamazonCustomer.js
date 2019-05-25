@@ -5,7 +5,7 @@ var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "CapuaN0r.",
+    password: "********",
     database:"bamazon"
 });
 
@@ -39,7 +39,7 @@ function selectBuy(){
         {
             type:"number",
             name:"productId" ,
-            message: "Please enter the product ID (item_id) of the item that you want to buy."
+            message: "\nPlease enter the product ID (item_id) of the item that you want to buy.\n"
         },
         { 
             type: "number",
@@ -59,18 +59,19 @@ function selectBuy(){
             if (err) throw err;
             if(parseInt(res[0].stock_quantity) - quantity >= 0){
                 var total = parseFloat(res[0].price)*quantity;
-                console.log("Your total is $" +total + " for " +quantity + " "+ res[0].product_name + "\n");
-                
-               // console.log("Current stock: "+ res[0].stock_quantity);
-                //console.log("Items you want to buy: "+ itemQuantity);
+                console.log("Your total is $" +total.toFixed(2) + " for " +quantity + " "+ res[0].product_name + "\n");
+
             }else {
                 console.log("Sorry, there is not enough items in stock to fulfill your order. \n")
             }
+            connection.query('UPDATE products SET stock_quantity=? WHERE item_id=?', [res[0].stock_quantity - quantity, itemId],
+
+            function (err, res) {
+                if (err) throw err;
+            });
         })
+
     });
 };
 
 
-function updateItems(){
-
-};
