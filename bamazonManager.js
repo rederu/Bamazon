@@ -121,7 +121,21 @@ function addInventory() {
                
             }
             console.log("Units added successfully!");
-
+            inquirer.prompt([
+                {
+                    name: "goBack",
+                    type: "list",
+                    message: "Would you like to go back to the main menu?",
+                    choices:["Yes", "No"]
+                }
+            ]).then(function(answer){
+                if(answer.goBack ==="Yes"){
+                    setTimeout(displayOptions, 800);
+                }else{
+                    console.log("End of session.")
+                    connection.end();
+                }
+            })//End inquirer2
 
         });//End connection query
 
