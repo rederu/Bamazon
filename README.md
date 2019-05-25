@@ -25,7 +25,7 @@ Manager View is located in the <b>bamazonManager.js</b> file which displays a me
   Allows the user to add more units to the stock of a product located by its id. it requests the ID of the product which stock will be increased and the number of units that will be added to the current stock.
   <li><b><i>Add New Product.</i></b></li>
   Allows the user to add a new product. It requests a product name, the name of the department to which the product will belong, the price per unit and the quiantity available in stock. It adds the product to the  list after that.
-  <li>Exit.</li>
+  <li><b><i>Exit.</b></i></li>
   Allows the user to close the current session. 
 </ul>
 
