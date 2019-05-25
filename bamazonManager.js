@@ -10,7 +10,7 @@ var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "**********",
+    password: "********",
     database: "bamazon"
 });
 
@@ -41,11 +41,15 @@ function displayOptions() {
                 setTimeout(displayOptions, 800);
                 break;
             case (option3):
+                addInventory();
+                //setTimeout(displayOptions, 800);
                 break;
             case (option4):
+                addProduct();
+                // setTimeout(displayOptions, 800);
                 break;
             case (option5):
-                console.log("Thank you for your visit.");
+                console.log("Thank you for your visit!");
                 connection.end();
                 break;
         }
@@ -72,20 +76,58 @@ function displayStore() {
 function lowQuantity() {
     console.log("The following products are low on stock: ");
     console.log('=====================================================================');
-    connection.query("SELECT * FROM products", function (err, res) {
+    connection.query("SELECT * FROM products WHERE stock_quantity < 5", function (err, res) {
         if (err) throw err;
 
         for (var i = 0; i < res.length; i++) {
-            if (res[i].stock_quantity <= 5) {
-                console.log(
-                    " Item ID: " + res[i].item_id +
-                    " \n Product: " + res[i].product_name +
-                    " \n Department: " + res[i].department_name +
-                    " \n Price: $" + res[i].price +
-                    " \n Units: " + res[i].stock_quantity
-                );
-                console.log('---------------------------------------------------------------------');
-            }
+            console.log(
+                " Item ID: " + res[i].item_id +
+                " \n Product: " + res[i].product_name +
+                " \n Department: " + res[i].department_name +
+                " \n Price: $" + res[i].price +
+                " \n Units: " + res[i].stock_quantity
+            );
+            console.log('---------------------------------------------------------------------');
         }
     });
+};
+
+function addInventory() {
+    inquirer.prompt([
+        {
+            name: "itemID",
+            type: "number",
+            message: "Please provide the item ID of the product you want to add units: "
+        },
+        {
+            name: "addQuantity",
+            type: "number",
+            message: "How many units would you like to add?"
+        }
+    ]).then(function (answer) {
+        var itemId = answer.itemID;
+        var newQuantity = answer.addQuantity;
+        connection.query("SELECT * FROM products;", function (error, res) {
+            if (error) throw error;
+
+            for (var i = 0; i < res.length; i++) {
+
+                if (res[i].item_id === itemId) {
+                    newQuantity += parseInt(res[i].stock_quantity);
+                    console.log(newQuantity);
+                    connection.query("UPDATE products SET stock_quantity = " + newQuantity + " WHERE item_id = " + itemId + ";", function (error) {
+                    });
+                }
+               
+            }
+            console.log("Units added successfully!");
+
+
+        });//End connection query
+
+    });//End inquirer
+};//End addInventory
+
+function addProduct() {
+
 };
