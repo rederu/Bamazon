@@ -13,8 +13,10 @@ connection.connect(function(err){
     if(err)
     throw err;
 
-    console.log("connected as id: " + connection.threadId);
+    console.log("Connected as ID: " + connection.threadId);
     displayStore();
+    selectBuy();
+
 });
 
 
@@ -33,5 +35,42 @@ function displayStore(){
 };
 
 function selectBuy(){
+    inquirer.prompt([
+        {
+            type:"number",
+            name:"productId" ,
+            message: "Please enter the product ID (item_id) of the item that you want to buy."
+        },
+        { 
+            type: "number",
+            name: "quantity",
+            message: "How many would you like to buy?"
+        }
+    ])
+    .then(function(answer){
+        var itemId = answer.productId;
+        var quantity = answer.quantity;
+
+        connection.query("SELECT * FROM products WHERE ?",
+        {
+            item_id: itemId
+        }, 
+        function(err,res){
+            if (err) throw err;
+            if(parseInt(res[0].stock_quantity) - quantity >= 0){
+                var total = parseFloat(res[0].price)*quantity;
+                console.log("Your total is $" +total + " for " +quantity + " "+ res[0].product_name + "\n");
+                
+               // console.log("Current stock: "+ res[0].stock_quantity);
+                //console.log("Items you want to buy: "+ itemQuantity);
+            }else {
+                console.log("Sorry, there is not enough items in stock to fulfill your order. \n")
+            }
+        })
+    });
+};
+
+
+function updateItems(){
 
 };
