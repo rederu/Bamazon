@@ -6,7 +6,7 @@ var connection = mysql.createConnection({
     host: "localhost",
     port: 3306,
     user: "root",
-    password: "*******",
+    password: "*****",
     database: "bamazon"
 });
 
@@ -27,6 +27,7 @@ function displayStore() {
         if (err) {
             throw err;
         }
+        console.log("<<<<<                            WELCOME TO BAMAZON                            >>>>>")
         console.table(res);
 
         for (var i = 0; i < res.length; i++) {
@@ -36,11 +37,22 @@ function displayStore() {
 };
 
 function selectBuy() {
+    connection.query("SELECT * FROM bamazon.products", function (err, res) {
+        if (err) {
+            throw err;
+        }
     inquirer.prompt([
         {
             type: "number",
             name: "productId",
-            message: "\nPlease enter the product ID (item_id) of the item that you want to buy.\n"
+            message: "\nPlease enter the product ID (item_id) of the item that you want to buy.\n",
+            validate: function(value){
+                if(isNaN(value) == false && parseInt(value) <= res.length && parseInt(value) > 0){
+                  return true;
+                } else{
+                  return false;
+                }
+            }
         },
         {
             type: "number",
@@ -75,6 +87,7 @@ function selectBuy() {
                 })
 
         });
+    })
 };
 
 function continueShopping(total) {
@@ -90,7 +103,7 @@ function continueShopping(total) {
             displayStore();
             setTimeout(selectBuy, 800);
         } else {
-            console.log("Thank you for your purchase.");
+            console.log("Thank you for your purchase.  Please come back soon!");
             connection.end();
         }
     })
