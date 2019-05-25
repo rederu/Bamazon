@@ -2,7 +2,7 @@
 Welcome to Bamazon! 
 <h2>What is Bamazon</h2>
 Bamazon is an Amazon-like storefront app powered by MySQL and NodeJS to create a CLI store with a simple customer view and a manager view.
-Powered by the following NPM repositories:
+Powered by the following NPM dependencies:
 <ul>
   <li>mysql</li>
   <li>inquirer</li>
