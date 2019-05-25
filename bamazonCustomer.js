@@ -1,5 +1,6 @@
 var  mysql = require("mysql");
 var inquirer = require("inquirer");
+var total = 0;
 //Create connection with database.
 var connection = mysql.createConnection({
     host: "localhost",
@@ -60,18 +61,38 @@ function selectBuy(){
             if(parseInt(res[0].stock_quantity) - quantity >= 0){
                 var total = parseFloat(res[0].price)*quantity;
                 console.log("Your total is $" +total.toFixed(2) + " for " +quantity + " "+ res[0].product_name + "\n");
+                connection.query('UPDATE products SET stock_quantity=? WHERE item_id=?', [res[0].stock_quantity - quantity, itemId],
+
+                function (err, res) {
+                    if (err) throw err;
+                });
 
             }else {
                 console.log("Sorry, there is not enough items in stock to fulfill your order. \n")
             }
-            connection.query('UPDATE products SET stock_quantity=? WHERE item_id=?', [res[0].stock_quantity - quantity, itemId],
-
-            function (err, res) {
-                if (err) throw err;
-            });
+           
+            continueShopping();
         })
 
     });
 };
 
+function continueShopping(total){
+    inquirer.prompt([
+        {
+            type: "list",
+            name: "continue",
+            message: "Continue shopping?",
+            choices: ["Yes", "No"]
+        }
+    ]).then(function(answer){
+        if(answer.continue === "Yes"){
+            displayStore();
+            selectBuy();
+        }else{
+            //console.log("Your total is: $" +total);
+            console.log("Thank you for your purchase.");
+        }
+    })
+};
 
