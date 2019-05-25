@@ -6,13 +6,13 @@ USE bamazon;
 CREATE TABLE products (
   item_id INT NOT NULL AUTO_INCREMENT,
   product_name VARCHAR(200) NOT NULL,
-  departament_name VARCHAR(100) NULL,
+  department_name VARCHAR(100) NULL,
   price FLOAT(9,2),
   stock_quantity INTEGER,
   PRIMARY KEY (item_id)
 );
 
-INSERT INTO products (product_name, departament_name, price, stock_quantity)
+INSERT INTO products (product_name, department_name, price, stock_quantity)
 VALUES 
 ("LUENX Aviator Sunglasses",  "Sports and Outdoors", 15.29, 250),
 ("Gskyer AZ Mount Astronomical Refractor Telescope", "Camera and Photo", 81.59, 150),
