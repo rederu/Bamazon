@@ -13,7 +13,8 @@ The customer view is located in the <b>bamazonCustomer.js</b> file which display
 After the table with the available products is displayed, a prompt asks the user which item would they like to buy by selecting it by its item_id. The next prompt askts the user for the quantity they want to buy. If the quantity the user wants is more than the items available in stock, Bamazon will notify that there is not enough stock to process that order but, if the quantity of items available in stock is bigger than the user's request, Bamazon will process their order and notify them how much is it. 
 
 It also allows the user to choose if they want to continue shopping or if they prefer to exit the app.
-
+<img src="https://github.com/rederu/Bamazon/blob/master/Screencaps/01bamazonCustomerTable.PNG?raw=true" width="75%">
+<img src="https://github.com/rederu/Bamazon/blob/master/Screencaps/04bamazonCustomerOptions3.PNG?raw=true" width="75%">
 <h3>Manager View</h3>
 Manager View is located in the <b>bamazonManager.js</b> file which displays a menu with the following options:
 <ul>
@@ -28,6 +29,9 @@ Manager View is located in the <b>bamazonManager.js</b> file which displays a me
   <li><b><i>Exit.</b></i></li>
   Allows the user to close the current session. 
 </ul>
+
+<img src="https://github.com/rederu/Bamazon/blob/master/Screencaps/06bamazonManagerViewProd.PNG?raw=true" width="75%">
+<img src="https://github.com/rederu/Bamazon/blob/master/Screencaps/08bamazonManagerAddInv.PNG?raw=true" width="75%">
 
 <h2>How to install</h2>
 <ul>
